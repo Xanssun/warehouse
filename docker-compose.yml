@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  postgres_db:
+    image: postgres:15.4
+    container_name: "postgres_db"
+    environment:
+      - POSTGRES_DB=warehouse_database
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=123qwe
+    volumes:
+      - warehouse_database:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  warehouse_service:
+    image: "warehouse_service"
+    build: ./app
+    container_name: warehouse_service
+    depends_on:
+      - postgres_db
+    ports:
+      - "8080:8080"
+
+
+volumes:
+  warehouse_database:
